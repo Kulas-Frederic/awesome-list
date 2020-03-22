@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, Input } from '@angular/core';
+  
 @Component({
-  selector: 'al-home-feature-card',
-  templateUrl: './home-feature-card.component.html',
-  styles: []
+ selector: 'al-home-feature-card',
+ templateUrl: './home-feature-card.component.html',
+ styles: []
 })
-export class HomeFeatureCardComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class HomeFeatureCardComponent {
+ @Input() description: string;
+ @Input() icon: string;
+ @Input() title: string;
 }
