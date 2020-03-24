@@ -7,17 +7,19 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { LoaderComponent } from './components/loader/loader.component';
-
+import { ToastrComponent } from './components/toastr/toastr.component';
+import { AlertModule } from 'ngx-bootstrap/alert';
 
 @NgModule({
-  declarations: [NavbarComponent, FooterComponent, PageNotFoundComponent, LoaderComponent],
+  declarations: [NavbarComponent, FooterComponent, PageNotFoundComponent, LoaderComponent, ToastrComponent],
   imports: [
     CommonModule,
     BrowserAnimationsModule,
     PublicModule,
-    ProtectedModule
+    ProtectedModule,
+    AlertModule.forRoot(),
   ],
-  exports: [NavbarComponent, FooterComponent, PageNotFoundComponent, LoaderComponent]
+  exports: [NavbarComponent, FooterComponent, PageNotFoundComponent, LoaderComponent, ToastrComponent]
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
