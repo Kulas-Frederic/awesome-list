@@ -10,6 +10,9 @@ export class ToastrService {
  
  private toastr: BehaviorSubject<Toastr|null> = new BehaviorSubject(null);
  public readonly toastr$: Observable<Toastr|null> = this.toastr.asObservable();
+ public closeToastr() {
+  this.toastr.next(null);
+ }
  
  constructor() { }
  
