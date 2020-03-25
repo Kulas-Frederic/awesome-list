@@ -42,4 +42,7 @@ this.subscription.unsubscribe();
     this.layoutService.toggleSidenav();
 }
 
+public logout() {
+    this.authService.logout();
+}
 }
