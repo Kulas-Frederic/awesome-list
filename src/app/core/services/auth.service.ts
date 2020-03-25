@@ -4,9 +4,10 @@ import { User } from 'src/app/shared/models/user';
 import { HttpHeaders } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { switchMap, tap, catchError } from 'rxjs/operators';
+import { switchMap, tap, catchError, finalize } from 'rxjs/operators';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ErrorService } from 'src/app/core/services/error.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Injectable({
  providedIn: 'root'
@@ -15,7 +16,8 @@ export class AuthService {
  private user: BehaviorSubject<User|null> = new BehaviorSubject(null);
  public readonly user$: Observable<User|null> = this.user.asObservable();
  
- constructor(private http: HttpClient, private usersService: UsersService, private errorService: ErrorService) { }
+ constructor(private http: HttpClient, private usersService: UsersService, private errorService: ErrorService
+  , private loaderService: LoaderService) { }
 
  public register(name: string, email: string, password: string): Observable<User|null> {
   const url = `${environment.firebase.auth.baseURL}/signupNewUser?key=${environment.firebase.apiKey}`;
@@ -30,6 +32,8 @@ export class AuthService {
     headers: new HttpHeaders({'Content-Type':  'application/json'})
   };
 
+  this.loaderService.setLoading(true);
+
   return this.http.post(url, data, httpOptions).pipe(
     switchMap((data: any) => {
      const jwt: string = data.idToken;
@@ -42,7 +46,8 @@ export class AuthService {
      return this.usersService.save(user, jwt);
     }),
     tap(user => this.user.next(user)),
-    catchError(error => this.errorService.handleError(error))
+    catchError(error => this.errorService.handleError(error)),
+    finalize(() => this.loaderService.setLoading(false))
   );
 }     
 
