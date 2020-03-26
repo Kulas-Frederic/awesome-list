@@ -24,7 +24,7 @@ export class AuthService {
  }
 
  submit() {
-  this.authService.login(“John”, “Doe”).subscribe(user => {
+  this.authService.login('John', 'Doe').subscribe(user => {
    this.user = user;
    // Effectuer une autre action, avec l’utilisateur venant de s’inscrire.
   });
