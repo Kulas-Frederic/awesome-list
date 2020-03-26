@@ -118,6 +118,9 @@ public autoLogin(user: User) {
 //  }
 
 public logout(): void {
+  localStorage.removeItem('expirationDate');
+  localStorage.removeItem('token');
+  localStorage.removeItem('userId');
   this.user.next(null);
   this.router.navigate(['/login']);
  }
