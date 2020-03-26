@@ -14,10 +14,7 @@ export class UsersService {
  constructor(private http: HttpClient) { }
  
  save(user: User, jwt: string): Observable<User|null> {
-  const url = 
-   `${environment.firebase.firestore.baseURL}/users?key=
-    ${environment.firebase.apiKey}`;
- 
+  const url = `${environment.firebase.firestore.baseURL}/users?key=${environment.firebase.apiKey}&documentId=${user.id}`;
   const data = this.getDataForFirestore(user);
   const httpOptions = {
    headers: new HttpHeaders({
@@ -56,9 +53,7 @@ export class UsersService {
  }
 
  get(userId: string, jwt: string): Observable<User|null> {
-  const url =
-   `${environment.firebase.firestore.baseURL}:runQuery?key=
-    ${environment.firebase.apiKey}`;
+  const url =`${environment.firebase.firestore.baseURL}:runQuery?key=${environment.firebase.apiKey}`;
   const data = this.getSructuredQuery(userId);
   const httpOptions = {
    headers: new HttpHeaders({
@@ -90,5 +85,22 @@ export class UsersService {
     'limit': 1
    }
   };
+ }
+
+ update(user: User): Observable<User|null> {
+  const url = `${environment.firebase.firestore.baseURL}/users/${user.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
+  const data = this.getDataForFirestore(user);
+  const httpOptions = {
+   headers: new HttpHeaders({
+    'Content-Type':  'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+   })
+  };
+  
+  return this.http.patch(url, data, httpOptions).pipe(
+   switchMap((data: any) => {
+    return of(this.getUserFromFirestore(data.fields));
+   })
+  );
  } 
 }

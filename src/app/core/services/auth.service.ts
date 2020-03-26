@@ -125,4 +125,21 @@ public logout(): void {
   this.router.navigate(['/login']);
  }
 
+ public updateUserState(user: User): Observable<User|null> {
+    this.loaderService.setLoading(true);
+
+    return this.usersService.update(user).pipe(
+      tap(user => this.user.next(user)),
+      tap(_ => this.toastrService.showToastr({
+        category: 'success',
+        message: 'Vos informations ont été mises à jour !'
+      })),
+      catchError(error => this.errorService.handleError(error)),
+      finalize(() => this.loaderService.setLoading(false))
+    );
+  }
+   
+get currentUser(): User {
+    return this.user.getValue();
+} 
 }
